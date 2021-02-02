@@ -58,40 +58,34 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define nrf_IRQ_Pin GPIO_PIN_4
+#define nrf_IRQ_GPIO_Port GPIOA
 #define nrf_CE_Pin GPIO_PIN_1
 #define nrf_CE_GPIO_Port GPIOB
-#define LED_Pin GPIO_PIN_15
-#define LED_GPIO_Port GPIOB
-#define GPS_extint_Pin GPIO_PIN_9
-#define GPS_extint_GPIO_Port GPIOA
-#define GPS_Reset_Pin GPIO_PIN_6
-#define GPS_Reset_GPIO_Port GPIOC
+#define MCU_LED_Pin GPIO_PIN_15
+#define MCU_LED_GPIO_Port GPIOB
+#define GPS_TP_Pin GPIO_PIN_8
+#define GPS_TP_GPIO_Port GPIOA
+#define GPS_EXT_INT_Pin GPIO_PIN_9
+#define GPS_EXT_INT_GPIO_Port GPIOA
+#define GPS_RST_Pin GPIO_PIN_6
+#define GPS_RST_GPIO_Port GPIOC
 #define GPS_Fence_Pin GPIO_PIN_10
 #define GPS_Fence_GPIO_Port GPIOA
-#define RF98_Reset_Pin GPIO_PIN_15
-#define RF98_Reset_GPIO_Port GPIOA
+#define RF98_RST_Pin GPIO_PIN_15
+#define RF98_RST_GPIO_Port GPIOA
 #define RF98_DIO0_Pin GPIO_PIN_8
 #define RF98_DIO0_GPIO_Port GPIOB
-#define RF98_DIO1_Pin GPIO_PIN_9
-#define RF98_DIO1_GPIO_Port GPIOB
+#define RF_98DIO1_Pin GPIO_PIN_9
+#define RF_98DIO1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-
-
 #ifdef __cplusplus
 }
 #endif
-I2C_HandleTypeDef hi2c2;
 
-SPI_HandleTypeDef hspi1;
-SPI_HandleTypeDef hspi2;
-
-UART_HandleTypeDef huart2;
-
-void init() ;
-void init_data();
 #endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

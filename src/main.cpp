@@ -1,3 +1,13 @@
+/*
+
+Auto generated code from STM32 project
+/home/mx/STM32CubeIDE/workspace_1.5.0/1Radio_M8P1.1 
+
+transferred on 2.2.2021
+
+
+*/
+
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -20,46 +30,58 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include <stdio.h>
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
+/* USER CODE END Includes */
 
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c2;
+
+SPI_HandleTypeDef hspi1;
+SPI_HandleTypeDef hspi2;
+
+UART_HandleTypeDef huart2;
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART2_UART_Init(void);
+/* USER CODE BEGIN PFP */
 
-uint8_t data[32];
+/* USER CODE END PFP */
 
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
-{
-  
-  init();
-  init_data();
-
-  while (1)
-  {
-	  //flash_pin(5,LED_GPIO_Port,LED_Pin);
-    ++data[18];
-    HAL_SPI_Transmit(&hspi1,&data[18],1,100);
-    HAL_SPI_Transmit(&hspi2,&data[18],1,100);
-    hal_spi
-    HAL_GPIO_TogglePin
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
-}
-
-void init_data(){
-  for (size_t i = 0; i < 20; i++)
-  {
-    data[i] = (uint8_t) i;
-  }
-  
-}
-
-void init(void)
 {
   /* USER CODE BEGIN 1 */
 
@@ -88,6 +110,27 @@ void init(void)
   MX_SPI2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  // Set GPS RESET Pin HIGH to avoid GPS reset!
+  HAL_GPIO_WritePin(GPS_RST_GPIO_Port, GPS_RST_Pin, GPIO_PIN_SET);
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+	  /*#define MCU_LED_Pin GPIO_PIN_15
+#define MCU_LED_GPIO_Port GPIOB*/
+
+	    HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_RESET);
+	    HAL_Delay(10);
+	    HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
+	    HAL_Delay(1000);
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
 
 /**
@@ -211,7 +254,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -251,7 +294,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -332,37 +375,46 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_8|GPS_extint_Pin|GPS_Fence_Pin
-                          |RF98_Reset_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, nrf_CE_Pin|MCU_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, nrf_CE_Pin|LED_Pin|RF98_DIO0_Pin|RF98_DIO1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPS_EXT_INT_Pin|RF98_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPS_Reset_GPIO_Port, GPS_Reset_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPS_RST_GPIO_Port, GPS_RST_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PA4 PA8 GPS_extint_Pin GPS_Fence_Pin
-                           RF98_Reset_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_8|GPS_extint_Pin|GPS_Fence_Pin
-                          |RF98_Reset_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pins : nrf_IRQ_Pin GPS_TP_Pin GPS_Fence_Pin */
+  GPIO_InitStruct.Pin = nrf_IRQ_Pin|GPS_TP_Pin|GPS_Fence_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : nrf_CE_Pin LED_Pin RF98_DIO0_Pin RF98_DIO1_Pin */
-  GPIO_InitStruct.Pin = nrf_CE_Pin|LED_Pin|RF98_DIO0_Pin|RF98_DIO1_Pin;
+  /*Configure GPIO pins : nrf_CE_Pin MCU_LED_Pin */
+  GPIO_InitStruct.Pin = nrf_CE_Pin|MCU_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : GPS_Reset_Pin */
-  GPIO_InitStruct.Pin = GPS_Reset_Pin;
+  /*Configure GPIO pins : GPS_EXT_INT_Pin RF98_RST_Pin */
+  GPIO_InitStruct.Pin = GPS_EXT_INT_Pin|RF98_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPS_Reset_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : GPS_RST_Pin */
+  GPIO_InitStruct.Pin = GPS_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPS_RST_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RF98_DIO0_Pin RF_98DIO1_Pin */
+  GPIO_InitStruct.Pin = RF98_DIO0_Pin|RF_98DIO1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
