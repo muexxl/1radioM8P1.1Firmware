@@ -32,7 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "custom_main.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -64,8 +64,6 @@ void Error_Handler(void);
 #define nrf_CE_GPIO_Port GPIOB
 #define MCU_LED_Pin GPIO_PIN_15
 #define MCU_LED_GPIO_Port GPIOB
-#define GPS_TP_Pin GPIO_PIN_8
-#define GPS_TP_GPIO_Port GPIOA
 #define GPS_EXT_INT_Pin GPIO_PIN_9
 #define GPS_EXT_INT_GPIO_Port GPIOA
 #define GPS_RST_Pin GPIO_PIN_6

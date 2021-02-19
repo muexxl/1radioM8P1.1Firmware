@@ -1,0 +1,80 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/mx/1drone/08_1radio_firmware/1radio/include",
+                "/home/mx/1drone/08_1radio_firmware/1radio/src",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/CMSIS/Include",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/CMSIS/Device/ST/STM32G0xx/Include",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/STM32G0xx_HAL_Driver/Inc",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/STM32G0xx_HAL_Driver/Src",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/st7735",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/ssd1315",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/sn65dp141",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/hx8347d",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/Common",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/ina230",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/stlm75",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/tusb546",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/cbtl08gp053",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Adafruit_Shield",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/Fonts",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/CPU",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/TRACER_EMB",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/GUI_INTERFACE",
+                "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/Log",
+                "/home/mx/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/mx/1drone/08_1radio_firmware/1radio/include",
+                    "/home/mx/1drone/08_1radio_firmware/1radio/src",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/CMSIS/Include",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/CMSIS/Device/ST/STM32G0xx/Include",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/STM32G0xx_HAL_Driver/Inc",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/STM32G0xx_HAL_Driver/Src",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/st7735",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/ssd1315",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/sn65dp141",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/hx8347d",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/Common",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/ina230",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/stlm75",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/tusb546",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Components/cbtl08gp053",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Drivers/BSP/Adafruit_Shield",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/Fonts",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/CPU",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/TRACER_EMB",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/GUI_INTERFACE",
+                    "/home/mx/.platformio/packages/framework-stm32cubeg0/Utilities/Log",
+                    "/home/mx/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50100",
+                "STM32G0xx",
+                "STM32G070xx",
+                "USE_HAL_DRIVER",
+                "F_CPU=64000000L",
+                ""
+            ],
+            "compilerPath": "/home/mx/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m0plus",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

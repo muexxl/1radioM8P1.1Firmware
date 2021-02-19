@@ -1,13 +1,3 @@
-/*
-
-Auto generated code from STM32 project
-/home/mx/STM32CubeIDE/workspace_1.5.0/1Radio_M8P1.1 
-
-transferred on 2.2.2021
-
-
-*/
-
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -55,19 +45,25 @@ I2C_HandleTypeDef hi2c2;
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
+TIM_HandleTypeDef htim16;
+
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart2_rx;
 
 /* USER CODE BEGIN PV */
+char UART2_rxBuffer[16];
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_TIM16_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -105,29 +101,28 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C2_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_USART2_UART_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
 
-  // Set GPS RESET Pin HIGH to avoid GPS reset!
-  HAL_GPIO_WritePin(GPS_RST_GPIO_Port, GPS_RST_Pin, GPIO_PIN_SET);
-
+  //Avoid GPS Chip perma resetting by pulling pin up
+  HAL_UART_Receive_DMA (&huart2, (uint8_t*)UART2_rxBuffer, 5);
+  setup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-	  /*#define MCU_LED_Pin GPIO_PIN_15
-#define MCU_LED_GPIO_Port GPIOB*/
 
-	    HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_RESET);
-	    HAL_Delay(10);
-	    HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
-	    HAL_Delay(1000);
+
+loop();
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -312,6 +307,38 @@ static void MX_SPI2_Init(void)
 }
 
 /**
+  * @brief TIM16 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM16_Init(void)
+{
+
+  /* USER CODE BEGIN TIM16_Init 0 */
+
+  /* USER CODE END TIM16_Init 0 */
+
+  /* USER CODE BEGIN TIM16_Init 1 */
+
+  /* USER CODE END TIM16_Init 1 */
+  htim16.Instance = TIM16;
+  htim16.Init.Prescaler = 6400-1;
+  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim16.Init.Period = 100-1;
+  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim16.Init.RepetitionCounter = 0;
+  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM16_Init 2 */
+
+  /* USER CODE END TIM16_Init 2 */
+
+}
+
+/**
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -332,7 +359,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
@@ -360,6 +387,25 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* DMA1_Ch4_7_DMAMUX1_OVR_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Ch4_7_DMAMUX1_OVR_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Ch4_7_DMAMUX1_OVR_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -383,8 +429,8 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPS_RST_GPIO_Port, GPS_RST_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : nrf_IRQ_Pin GPS_TP_Pin GPS_Fence_Pin */
-  GPIO_InitStruct.Pin = nrf_IRQ_Pin|GPS_TP_Pin|GPS_Fence_Pin;
+  /*Configure GPIO pins : nrf_IRQ_Pin PA8 GPS_Fence_Pin */
+  GPIO_InitStruct.Pin = nrf_IRQ_Pin|GPIO_PIN_8|GPS_Fence_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -419,6 +465,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+
 
 /* USER CODE END 4 */
 
