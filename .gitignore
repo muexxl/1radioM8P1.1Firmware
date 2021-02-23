@@ -1,4 +1,6 @@
 
 autoGenCode
+.gitignore
 .pio/
+.pio/build/
 .vscode/
