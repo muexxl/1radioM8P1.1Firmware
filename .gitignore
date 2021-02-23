@@ -1,4 +1,4 @@
 
 autoGenCode
-.pio
-.vscode
+.pio/
+.vscode/
