@@ -1,0 +1,28 @@
+    |          ^~~~~~~~~~~
+compilation terminated.
+arm-none-eabi-g++ -o .pio/build/1drone_1radio_M8P/FrameworkArduino/abi.cpp.o -c -std=gnu++14 
+-fno-threadsafe-statics -fno-rtti -fno-exceptions -fno-use-cxa-atexit -Os -mcpu=cortex-m0plus -
+mthumb -ffunction-sections -fdata-sections -Wall -nostdlib --param max-inline-insns-single=500 
+-DPLATFORMIO=50100 -DSTM32G0xx -DSTM32G070xx -DSTM32G0xx -DARDUINO=10808 -DARDUINO_ARCH_STM32 -
+DARDUINO_1DRONE_1RADIO_M8P -DBOARD_NAME=\"1DRONE_1RADIO_M8P\" -DHAL_UART_MODULE_ENABLED -D__CORTEX_SC=0
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/avr 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/LL 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/OpenAMP 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb/hid 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb/cdc 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/STM32G0xx_HAL_Driver/Inc 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/STM32G0xx_HAL_Driver/Src 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/STM32G0xx 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/ST/STM32_USB_Device_Library/Core/Inc 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/ST/STM32_USB_Device_Library/Core/Src 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/open-amp/lib/include 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/libmetal/lib/include 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/virtual_driver 
+ -I/home/mx/.platformio/packages/framework-cmsis/CMSIS/Core/Include 
+ -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/CMSIS/Device/ST/STM32G0xx/Include -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/CMSIS/Device/ST/STM32G0xx/Source/Templates/gcc -I/home/mx/.platformio/packages/framework-cmsis/CMSIS/DSP/Include -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino "-I/home/mx/.platformio/packages/framework-arduinoststm32/variants/1drone 1radio M8P" 
+"-I/home/mx/.platformio/packages/framework-arduinoststm32/variants/1drone 
+1radio M8P" /home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/abi.cpp
+arm-none-eabi-gcc -o .pio/build/1drone_1radio_M8P/FrameworkArduino/avr/dtostrf.c.o -c -std=gnu11 -Os -mcpu=cortex-m0plus -mthumb -ffunction-sections -fdata-sections -Wall -nostdlib --param max-inline-insns-single=500 -DPLATFORMIO=50100 -DSTM32G0xx -DSTM32G070xx -DSTM32G0xx -DARDUINO=10808 -DARDUINO_ARCH_STM32 -DARDUINO_1DRONE_1RADIO_M8P -DBOARD_NAME=\"1DRONE_1RADIO_M8P\" -DHAL_UART_MODULE_ENABLED -D__CORTEX_SC=0 -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/avr -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32 -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/LL -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/OpenAMP -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb/hid -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/stm32/usb/cdc -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/STM32G0xx_HAL_Driver/Inc -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/STM32G0xx_HAL_Driver/Src -I/home/mx/.platformio/packages/framework-arduinoststm32/system/STM32G0xx -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/ST/STM32_USB_Device_Library/Core/Src -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/open-amp/lib/include -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/libmetal/lib/include -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Middlewares/OpenAMP/virtual_driver -I/home/mx/.platformio/packages/framework-cmsis/CMSIS/Core/Include -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/CMSIS/Device/ST/STM32G0xx/Include -I/home/mx/.platformio/packages/framework-arduinoststm32/system/Drivers/CMSIS/Device/ST/STM32G0xx/Source/Templates/gcc -I/home/mx/.platformio/packages/framework-cmsis/CMSIS/DSP/Include -I/home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino "-I/home/mx/.platformio/packages/framework-arduinoststm32/variants/1drone 1radio M8P" "-I/home/mx/.platformio/packages/framework-arduinoststm32/variants/1drone 1radio M8P" /home/mx/.platformio/packages/framework-arduinoststm32/cores/arduino/avr/dtostrf.c

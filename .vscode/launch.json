@@ -15,7 +15,7 @@
             "executable": "/home/mx/1drone/08_1radio_firmware/1radio/.pio/build/1drone_1radio/firmware.elf",
             "projectEnvName": "1drone_1radio",
             "toolchainBinDir": "/home/mx/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "/home/mx/.platformio/platforms/ststm32/misc/svd/STM32G071.svd",
+            "svdPath": "/home/mx/.platformio/platforms/ststm32/misc/svd/STM32G070.svd",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -29,7 +29,7 @@
             "executable": "/home/mx/1drone/08_1radio_firmware/1radio/.pio/build/1drone_1radio/firmware.elf",
             "projectEnvName": "1drone_1radio",
             "toolchainBinDir": "/home/mx/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "/home/mx/.platformio/platforms/ststm32/misc/svd/STM32G071.svd",
+            "svdPath": "/home/mx/.platformio/platforms/ststm32/misc/svd/STM32G070.svd",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

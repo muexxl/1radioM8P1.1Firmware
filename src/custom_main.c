@@ -93,7 +93,7 @@ void regular_0_5Hz()
 void flash_LED()
 {
     HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_RESET);
-    HAL_Delay(5);
+    HAL_Delay(10);
     HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
 }
 
