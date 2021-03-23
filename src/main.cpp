@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <variant.h>
+
 #include <SPI.h>
 
 #include <mxsupport.h>
@@ -30,8 +32,10 @@ RF24 &radio{radiolink.radio};
 void setup () {
     //0pinMode(LED_BUILTIN, OUTPUT);
     SystemClock_Config();
-    MX_TIM15_Init();
+    MX_TIM15_Init(); //for flashing LED
     initSerial();
+    messageHandler.begin();
+    messageHandler.sendBuffer = &sendBuffer;
 }
 
 void loop (){
