@@ -14,6 +14,7 @@
 #include <radiolink.h>
 #include <messagehandler.h>
 #include <circularbuffer.h>
+#include <RF24.h>
 
 extern void SystemClock_Config(void);
 extern bool is_due_2000ms;
@@ -36,6 +37,8 @@ void setup () {
     initSerial();
     messageHandler.begin();
     messageHandler.sendBuffer = &sendBuffer;
+    radiolink.maxTimeBetweenContactInMillis = config::CONNECTION_TIMEOUT;
+    messageHandler.sendRegistrationRequest();
 }
 
 void loop (){
@@ -43,8 +46,14 @@ void loop (){
     if (is_due_2000ms) {
         is_due_2000ms = false;
         flash_LED(); // Heartbeat
-        Serial.write("Hello World!\n");
+        if (!radiolink.regularCheck())
+        {
+            messageHandler.sendRegistrationRequest();
+            Serial.print(("Sending Registration request\n"));
+        };
     }
+    messageHandler.checkRadioAndHandleMessage();
+    loadFromSerialToSendBuffer();
 }
 
 // int _write (int file, char * ptr, int len)
