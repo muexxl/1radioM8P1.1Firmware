@@ -6,7 +6,7 @@
 #include <radioconfig.h>
 #include <circularbuffer.h>
 
-#define VERBOSE
+//#define VERBOSE
 #define PACKAGE_CONTROL_OFF
 
 #define BROADCAST_PIPE 0x01
@@ -19,9 +19,12 @@ namespace CommCodes
     const uint8_t RESET_REQUEST = 0x03;
     const uint8_t PING = 0x04;
     const uint8_t PONG = 0x05;
+    const uint8_t TIME_MSG = 0x06;
     const uint32_t STARTSEQUENCE = 0x07060504;
     const uint8_t HELLO = 0xA0;
+
     const uint8_t MAX_MSG_ID = 0x40;
+    const uint8_t GPS_MSG = 0x41;
 }; // namespace CommCodes
 
 class MessageHandler
@@ -39,6 +42,8 @@ public:
     CircularBuffer *sendBuffer;
     
     void handleMessage(uint8_t *msg, int len);
+    void handleBroadcast(uint8_t *msg, int len);
+
     void handleConfigMessage(uint8_t *msg, int len);
     void handleRegistrationMessage(uint8_t *msg, int len);
     void begin();

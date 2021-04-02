@@ -17,6 +17,10 @@ void MessageHandler::begin()
     radiolink.begin();
 }
 
+void MessageHandler::handleBroadcast(uint8_t *msg, int len)
+{
+    Serial.print(F("BroadCast received\n"));
+}
 void MessageHandler::handleMessage(uint8_t *msg, int len)
 {
     if (len == 0)
@@ -87,13 +91,21 @@ void MessageHandler::checkRadioAndHandleMessage()
     if (len > 0)
     {
 #ifdef VERBOSE
+#warning VERBOSE MESSAGING ENABLED
         Serial.printf(F("Received message\n on pipe # %d"), pipeNo);
 
         printObject(&radiolink.recvBuffer, len);
+
 #endif //VERBOSE
-        handleMessage(&radiolink.recvBuffer[0], len);
+        if (pipeNo == BROADCAST_PIPE)
+        {
+            handleBroadcast(&radiolink.recvBuffer[0], len);
+        }
+        else
+        {
+            handleMessage(&radiolink.recvBuffer[0], len);
+        }
     }
-    
 }
 
 void MessageHandler::handleDataMessage(uint8_t *msg, int len)

@@ -83,6 +83,7 @@ void Radiolink::setAddresses()
 
     address = config.getBroadcastAddress();
     radio.openReadingPipe(1, reinterpret_cast<uint8_t *>(&address));
+    radio.setAutoAck(1,false);
 }
 
 bool Radiolink::printSelfCheck()

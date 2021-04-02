@@ -38,7 +38,7 @@ void setup () {
     messageHandler.begin();
     messageHandler.sendBuffer = &sendBuffer;
     radiolink.maxTimeBetweenContactInMillis = config::CONNECTION_TIMEOUT;
-    messageHandler.sendRegistrationRequest();
+    //messageHandler.sendRegistrationRequest();
 }
 
 void loop (){
@@ -48,7 +48,7 @@ void loop (){
         flash_LED(); // Heartbeat
         if (!radiolink.regularCheck())
         {
-            messageHandler.sendRegistrationRequest();
+            //messageHandler.sendRegistrationRequest();
             Serial.print(("Sending Registration request\n"));
         };
     }
