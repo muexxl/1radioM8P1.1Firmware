@@ -82,15 +82,18 @@ void MessageHandler::sendPong(uint8_t *msg, int len)
 //Client Routine
 void MessageHandler::checkRadioAndHandleMessage()
 {
-    uint8_t len = radiolink.checkRadio();
+    uint8_t pipeNo{0xff};
+    uint8_t len = radiolink.checkRadio(&pipeNo);
     if (len > 0)
     {
 #ifdef VERBOSE
-        Serial.print(F("Received message\n"));
+        Serial.printf(F("Received message\n on pipe # %d"), pipeNo);
+
         printObject(&radiolink.recvBuffer, len);
 #endif //VERBOSE
         handleMessage(&radiolink.recvBuffer[0], len);
     }
+    
 }
 
 void MessageHandler::handleDataMessage(uint8_t *msg, int len)

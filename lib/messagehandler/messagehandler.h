@@ -6,8 +6,10 @@
 #include <radioconfig.h>
 #include <circularbuffer.h>
 
-//#define VERBOSE
+#define VERBOSE
 #define PACKAGE_CONTROL_OFF
+
+#define BROADCAST_PIPE 0x01
 
 namespace CommCodes
 {
