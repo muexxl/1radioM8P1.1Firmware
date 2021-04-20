@@ -2,7 +2,9 @@
 
 #include <Arduino.h>
 #include <mxsupport.h>
+#include <mxtiming.h>
 
+extern CircularBuffer rx_buffer_broadcast;
 //#define VERBOSE
 
 MessageHandler::MessageHandler()
@@ -16,10 +18,25 @@ void MessageHandler::begin()
 {
     radiolink.begin();
 }
+void MessageHandler::handle_RTCM_Message(uint8_t *msg, int len)
+{
+    flash_LED(3);
+    //printObject(msg, len);
+}
 
 void MessageHandler::handleBroadcast(uint8_t *msg, int len)
 {
-    Serial.print(F("BroadCast received\n"));
+    //radiolink.restore_ack_payload_buffer();
+    uint8_t msgID = msg[0];
+    if (msgID == CommCodes::GPS_RTCM_MSG)
+    {
+        handle_RTCM_Message(msg,len);
+    }
+    else if (msgID == CommCodes::HEARTBEAT)
+        {
+            flash_LED();
+        }
+    
 }
 void MessageHandler::handleMessage(uint8_t *msg, int len)
 {

@@ -40,7 +40,13 @@ void flash_LED(int repetition)
         HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);
     }
     htim15.Init.RepetitionCounter = repetition-1;
-    htim15.Init.Period = 120;
+    
+    if (repetition == 1){
+        htim15.Init.Period = 10;
+    }
+    else {
+        htim15.Init.Period = 120;
+    }
     if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
     {
         Error_Handler();
@@ -55,6 +61,12 @@ void flash_LED(int repetition)
     }
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = 100;
+    if (repetition == 1){
+        sConfigOC.Pulse = 1;
+    }
+    else {
+        sConfigOC.Pulse = 100;
+    }
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;

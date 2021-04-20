@@ -69,7 +69,7 @@ int CircularBuffer::available() const
 void CircularBuffer::put(uint8_t item)
 {
 	buf[head] = item;
-
+	
 	if (full)
 	{
 		tail = (++tail) % maxSize;

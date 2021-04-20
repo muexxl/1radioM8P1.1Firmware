@@ -21,6 +21,8 @@ extern bool is_due_2000ms;
  bool loadFromSerialToSendBuffer();
 
 CircularBuffer sendBuffer(config::SEND_BUFFER_SIZE);
+CircularBuffer rx_buffer_broadcast(200);
+CircularBuffer rx_rtcm_buffer(config::RTCM_BUFFER_SIZE);
 int time1, time2;
 uint8_t counter;
 MessageHandler messageHandler;
@@ -45,11 +47,14 @@ void loop (){
     update_timers();
     if (is_due_2000ms) {
         is_due_2000ms = false;
-        flash_LED(); // Heartbeat
+        //flash_LED(); // Heartbeat
         if (!radiolink.regularCheck())
         {
-            //messageHandler.sendRegistrationRequest();
+            messageHandler.sendRegistrationRequest();
+            #ifdef VERBOSE
+            
             Serial.print(("Sending Registration request\n"));
+            #endif // VERBOSE
         };
     }
     messageHandler.checkRadioAndHandleMessage();

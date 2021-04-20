@@ -22,7 +22,7 @@ public:
     uint8_t *pBackupBuffer;
     uint8_t backupBufferLen{0};
 
-    RF24 radio = RF24(4, 5);
+    RF24 radio = RF24(0x37, 0x36);
     RadioConfig config;
 
     uint32_t address;
@@ -52,6 +52,7 @@ public:
 
     void restoreSendBufferFromBackupBuffer();
     void shiftSendBufferToBackupBuffer();
+    void restore_ack_payload_buffer();
     
 
     void openReadingPipe(int, uint32_t);

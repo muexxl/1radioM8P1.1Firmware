@@ -25,6 +25,8 @@ namespace CommCodes
 
     const uint8_t MAX_MSG_ID = 0x40;
     const uint8_t GPS_MSG = 0x41;
+    const uint8_t GPS_RTCM_MSG = 0xd3;
+    const uint8_t HEARTBEAT = 0x48;
 }; // namespace CommCodes
 
 class MessageHandler
@@ -43,6 +45,8 @@ public:
     
     void handleMessage(uint8_t *msg, int len);
     void handleBroadcast(uint8_t *msg, int len);
+    void handle_RTCM_Message(uint8_t *msg, int len);
+
 
     void handleConfigMessage(uint8_t *msg, int len);
     void handleRegistrationMessage(uint8_t *msg, int len);

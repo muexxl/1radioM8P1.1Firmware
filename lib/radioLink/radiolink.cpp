@@ -40,6 +40,7 @@ bool Radiolink::initRadio()
     radio.enableDynamicPayloads();
     radio.enableAckPayload();
     radio.setAddressWidth(4);
+    radio.enableAckPayload();
     setAddresses();
 
     radio.startListening();
@@ -47,7 +48,6 @@ bool Radiolink::initRadio()
 }
 void Radiolink::openReadingPipe(int pipe, uint32_t address)
 {
-
     radio.openReadingPipe(pipe, reinterpret_cast<uint8_t *>(&address));
 }
 void Radiolink::openWritingPipe(uint32_t address)
@@ -188,6 +188,13 @@ void Radiolink::writeSendBufferToAckPayloadBuffer()
 {
     radio.writeAckPayload(0, pSendBuffer, sendBufferLen); 
 }
+
+void Radiolink::restore_ack_payload_buffer()
+{
+    radio.flush_tx();
+    radio.writeAckPayload(0, pSendBuffer, sendBufferLen); 
+}
+
 
 uint8_t Radiolink::checkRadio(void *buffer, uint8_t *pipeNo)
 {
