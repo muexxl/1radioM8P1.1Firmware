@@ -41,7 +41,7 @@ public:
     ClientManager clientManager;
     Radiolink radiolink;
     RadioConfig & config {radiolink.config};
-    CircularBuffer *sendBuffer;
+    //CircularBuffer *sendBuffer;
     
     void handleMessage(uint8_t *msg, int len);
     void handleBroadcast(uint8_t *msg, int len);

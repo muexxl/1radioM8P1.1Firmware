@@ -15,39 +15,53 @@
 #include <messagehandler.h>
 #include <circularbuffer.h>
 #include <RF24.h>
+#include <ublox.h>
+#include <setup.h>
 
-extern void SystemClock_Config(void);
 extern bool is_due_2000ms;
  bool loadFromSerialToSendBuffer();
 
 CircularBuffer sendBuffer(config::SEND_BUFFER_SIZE);
 CircularBuffer rx_buffer_broadcast(200);
 CircularBuffer rx_rtcm_buffer(config::RTCM_BUFFER_SIZE);
+
+I2C_HandleTypeDef hi2c2;
+
+UBlox ublox;
+MessageHandler messageHandler;
+
 int time1, time2;
 uint8_t counter;
-MessageHandler messageHandler;
 Radiolink &radiolink{messageHandler.radiolink};
 RadioConfig &radioConfig{radiolink.config};
 RF24 &radio{radiolink.radio};
 
-
-
+uint8_t data[]= " Hello World!";
+u_int16_t len{10};
+HAL_StatusTypeDef answer;
 void setup () {
     //0pinMode(LED_BUILTIN, OUTPUT);
     SystemClock_Config();
     MX_TIM15_Init(); //for flashing LED
+    MX_I2C2_Init();
     initSerial();
     messageHandler.begin();
-    messageHandler.sendBuffer = &sendBuffer;
+    //messageHandler.sendBuffer = &sendBuffer;
     radiolink.maxTimeBetweenContactInMillis = config::CONNECTION_TIMEOUT;
-    //messageHandler.sendRegistrationRequest();
+    //messageHandler.sendRegistrationRequest();    
+    data[0] = 0xf0; //register address ?!
+    data[0] = 0xf1; //register address ?!
+    data[0] = 0xf2; //register address ?!
+    //
 }
 
 void loop (){
     update_timers();
     if (is_due_2000ms) {
         is_due_2000ms = false;
-        //flash_LED(); // Heartbeat
+        flash_LED(); // Heartbeat
+        answer = HAL_I2C_Master_Transmit_IT(&hi2c2,0x42<<1,&data[0],len);
+        answer = HAL_BUSY;
         if (!radiolink.regularCheck())
         {
             messageHandler.sendRegistrationRequest();
@@ -57,8 +71,12 @@ void loop (){
             #endif // VERBOSE
         };
     }
-    messageHandler.checkRadioAndHandleMessage();
-    loadFromSerialToSendBuffer();
+    //messageHandler.checkRadioAndHandleMessage();
+    //loadFromSerialToSendBuffer();
+    // Wire.beginTransmission(0x42);
+    // Wire.write(0xff);
+    // Wire.endTransmission();
+    
 }
 
 // int _write (int file, char * ptr, int len)
@@ -130,3 +148,10 @@ void initBuffer()
         sendBuffer.put(i);
     }
 };
+
+void HAL_I2C_MasterTxCpltCallback (I2C_HandleTypeDef * hi2c2)
+{
+	answer = HAL_BUSY;
+	//flash_LED();// TX Done .. Do Something!
+
+}
