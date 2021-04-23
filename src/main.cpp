@@ -1,12 +1,12 @@
+#include <main.h>
+#include <config.h>
 #include <Arduino.h>
 #include <variant.h>
 
 #include <SPI.h>
-
 #include <mxsupport.h>
 #include <mxtiming.h>
 
-#include <main.h>
 
 #include <radioconfig.h>
 #include <configManager.h>
