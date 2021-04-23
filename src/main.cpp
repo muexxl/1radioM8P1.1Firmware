@@ -39,6 +39,8 @@ RF24 &radio{radiolink.radio};
 uint8_t data[]= " Hello World!";
 u_int16_t len{10};
 HAL_StatusTypeDef answer;
+HAL_I2C_StateTypeDef status;
+
 void setup () {
     //0pinMode(LED_BUILTIN, OUTPUT);
     SystemClock_Config();
@@ -57,11 +59,16 @@ void setup () {
 
 void loop (){
     update_timers();
+    if (hi2c2.State == HAL_I2C_STATE_READY ){
+        answer = HAL_I2C_Master_Transmit_IT(&hi2c2,0x42<<1,&data[0],len);
+    } else {
+        status = hi2c2.State;
+        asm("NOP");
+    }
     if (is_due_2000ms) {
         is_due_2000ms = false;
         flash_LED(); // Heartbeat
-        answer = HAL_I2C_Master_Transmit_IT(&hi2c2,0x42<<1,&data[0],len);
-        answer = HAL_BUSY;
+        
         if (!radiolink.regularCheck())
         {
             messageHandler.sendRegistrationRequest();
@@ -151,7 +158,5 @@ void initBuffer()
 
 void HAL_I2C_MasterTxCpltCallback (I2C_HandleTypeDef * hi2c2)
 {
-	answer = HAL_BUSY;
-	//flash_LED();// TX Done .. Do Something!
 
 }
