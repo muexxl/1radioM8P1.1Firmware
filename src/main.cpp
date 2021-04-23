@@ -59,12 +59,7 @@ void setup () {
 
 void loop (){
     update_timers();
-    if (hi2c2.State == HAL_I2C_STATE_READY ){
-        answer = HAL_I2C_Master_Transmit_IT(&hi2c2,0x42<<1,&data[0],len);
-    } else {
-        status = hi2c2.State;
-        asm("NOP");
-    }
+    //ublox.send(&data[0], len);
     if (is_due_2000ms) {
         is_due_2000ms = false;
         flash_LED(); // Heartbeat
@@ -78,8 +73,8 @@ void loop (){
             #endif // VERBOSE
         };
     }
-    //messageHandler.checkRadioAndHandleMessage();
-    //loadFromSerialToSendBuffer();
+    messageHandler.checkRadioAndHandleMessage();
+    loadFromSerialToSendBuffer();
     // Wire.beginTransmission(0x42);
     // Wire.write(0xff);
     // Wire.endTransmission();
