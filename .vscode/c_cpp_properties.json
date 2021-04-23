@@ -10,8 +10,8 @@
             "includePath": [
                 "/home/mx/1drone/08_1radio_firmware/1radio/include",
                 "/home/mx/1drone/08_1radio_firmware/1radio/src",
-                "/home/mx/1drone/08_1radio_firmware/1radio/lib/mxtiming",
                 "/home/mx/1drone/08_1radio_firmware/1radio/lib/messagehandler",
+                "/home/mx/1drone/08_1radio_firmware/1radio/lib/mxtiming",
                 "/home/mx/1drone/08_1radio_firmware/1radio/lib/radioLink",
                 "/home/mx/1drone/08_1radio_firmware/1radio/lib/ClientManager",
                 "/home/mx/1drone/08_1radio_firmware/1radio/lib/configManager",
@@ -62,8 +62,8 @@
                 "path": [
                     "/home/mx/1drone/08_1radio_firmware/1radio/include",
                     "/home/mx/1drone/08_1radio_firmware/1radio/src",
-                    "/home/mx/1drone/08_1radio_firmware/1radio/lib/mxtiming",
                     "/home/mx/1drone/08_1radio_firmware/1radio/lib/messagehandler",
+                    "/home/mx/1drone/08_1radio_firmware/1radio/lib/mxtiming",
                     "/home/mx/1drone/08_1radio_firmware/1radio/lib/radioLink",
                     "/home/mx/1drone/08_1radio_firmware/1radio/lib/ClientManager",
                     "/home/mx/1drone/08_1radio_firmware/1radio/lib/configManager",
