@@ -17,9 +17,16 @@ void test_true(void)
     TEST_ASSERT_TRUE(true);
 }
 
+void test_false(void)
+{
+    TEST_ASSERT_FALSE(false);
+    uint8_t data[] = {0xfd,0x10,0x43,0x01,0x01,0x10,0x43,0x01,0x01,0x6f,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x71,0x4a,0x35,0x75,0x6d,0x00,0x00,0x00,0x84,0xa4};
+
+}
+
 void test_circ_buff(void)
 {
-    CircularBuffer cb(0x30);
+     CircularBuffer cb(0x30);
     for (uint8_t i = 0; i < 0x30; i++)
     {
         cb.put(i);
@@ -27,10 +34,10 @@ void test_circ_buff(void)
     TEST_ASSERT_EQUAL(0x00, cb.read(0));
     TEST_ASSERT_EQUAL(true, cb.isFull());
     TEST_ASSERT_EQUAL(0, cb.available());
-    printObject(cb.buf, 0x30);
+    //printObject(cb.buf, 0x30);
 
     cb.dropMiddleData(0x05, 0x10);
-    printObject(cb.buf, 0x30);
+    //printObject(cb.buf, 0x30);
     TEST_ASSERT_EQUAL(0x10, cb.available());
     TEST_ASSERT_EQUAL(1, cb.read(1));
     TEST_ASSERT_EQUAL(0, cb.read(0));
@@ -124,16 +131,54 @@ void test_mav_drop2(void)
     cb.print();
 
 }
+void test_cb_put_get_many(void) {
+   char test_data []= "Hello Brave new world, Hello Brave brave new new world world" ;
+   char return_data[10];
+   CircularBuffer cb = CircularBuffer(32);
+    //printObject(&test_data,32);
+    CIRCBUF_STATUS result{CIRCBUF_OK};
+    result = cb.put(&test_data[0],10);
+    TEST_ASSERT_EQUAL(CIRCBUF_OK,result);
+    
+     cb.reset();
+    int size = cb.size();
+    TEST_ASSERT_EQUAL(0,size);
 
+    result= cb.put(&test_data[0],33);
+    TEST_ASSERT_EQUAL(CIRCBUF_OVERFLOW,result);
+    cb.reset();
+
+    result= cb.put(&test_data[0],2);
+    result=cb.get(&return_data[0],2);
+    TEST_ASSERT_EQUAL(CIRCBUF_OK,result);
+    TEST_ASSERT_EQUAL_CHAR(test_data[1],return_data[1]);
+
+    cb.reset();
+    
+    result= cb.put(&test_data[0],2);
+    result=cb.get(&return_data[0],3);
+
+    TEST_ASSERT_EQUAL(CIRCBUF_NOT_ENOUGH_DATA,result);
+    
+    TEST_ASSERT_EQUAL(0,return_data[2]);
+
+    TEST_ASSERT_EQUAL_CHAR(test_data[1],return_data[1]);
+
+
+
+}
 
 void setup()
 {
-
+    HAL_Delay(1000);
     UNITY_BEGIN(); // IMPORTANT LINE!
-    RUN_TEST(test_true);
+    RUN_TEST(test_false);
     RUN_TEST(test_circ_buff);
+    RUN_TEST(test_true);
+    RUN_TEST(test_false);
     RUN_TEST(test_mav_drop);
     RUN_TEST(test_mav_drop2);
+    RUN_TEST(test_cb_put_get_many);
     UNITY_END();
 }
 

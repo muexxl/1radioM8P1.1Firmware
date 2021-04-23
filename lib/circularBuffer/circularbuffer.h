@@ -19,13 +19,23 @@ Kudos to https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer
 
     x = circle.get()
 */
+typedef enum
+{
+  CIRCBUF_OK       = 0x00U,
+  CIRCBUF_ERROR    = 0x01U,
+  CIRCBUF_OVERFLOW       = 0x02U,
+  CIRCBUF_NOT_ENOUGH_DATA       = 0x03U,
+} CIRCBUF_STATUS;
+
 
 class CircularBuffer {
 public:
 	explicit CircularBuffer(int size);
     ~CircularBuffer();
 	void put(uint8_t item);
+	CIRCBUF_STATUS put(char * data, int len);
 	uint8_t get();
+	CIRCBUF_STATUS get(char * data, int len);
 	void reset();
 	bool isEmpty() const;
 	bool isFull() const;

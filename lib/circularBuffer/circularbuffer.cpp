@@ -80,6 +80,41 @@ void CircularBuffer::put(uint8_t item)
 	full = tail == head;
 }
 
+
+CIRCBUF_STATUS CircularBuffer::put(char * data, int len){
+	
+	CIRCBUF_STATUS result;
+	if (len <= available()){
+		result = CIRCBUF_OK;
+	} else {
+		result = CIRCBUF_OVERFLOW;
+	}
+
+	while (len--){
+		put(*data++);	
+		}
+	
+	return result;
+}
+
+
+CIRCBUF_STATUS CircularBuffer::get(char * data, int len){
+	CIRCBUF_STATUS answer;
+
+	if (len <= size()){
+		answer=CIRCBUF_OK;
+	} else {
+
+		answer=CIRCBUF_NOT_ENOUGH_DATA;
+	}
+
+	while(len--){
+		*data++=get();
+}
+	return answer;
+}
+
+
 uint8_t CircularBuffer::get()
 {
 	uint8_t val{0};
