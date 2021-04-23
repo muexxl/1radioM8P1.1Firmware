@@ -3,9 +3,13 @@
 #include <Arduino.h>
 #include <mxsupport.h>
 #include <mxtiming.h>
+#include <ublox.h>
 
+extern CircularBuffer sendBuffer;
 extern CircularBuffer rx_buffer_broadcast;
-//#define VERBOSE
+extern UBlox ublox;
+
+//#define VERBOSEublox
 
 MessageHandler::MessageHandler()
 {
@@ -20,7 +24,9 @@ void MessageHandler::begin()
 }
 void MessageHandler::handle_RTCM_Message(uint8_t *msg, int len)
 {
-    flash_LED(3);
+    ublox.send(++msg, --len);
+    
+    flash_LED();
     //printObject(msg, len);
 }
 
@@ -151,9 +157,9 @@ void MessageHandler::loadNextMessageToAckBuffer()
     radiolink.sendBufferLen = 1;
     for (int i = 1; i < 32; i++)
     {
-        if (!sendBuffer->isEmpty())
+        if (!sendBuffer.isEmpty())
         {
-            radiolink.pSendBuffer[i] = sendBuffer->get();
+            radiolink.pSendBuffer[i] = sendBuffer.get();
             ++radiolink.sendBufferLen;
         }
         else

@@ -1,10 +1,9 @@
 #include "stm32g0xx_hal.h"
-
 #include <Arduino.h>
-#include <RF24.h>
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim);
-void MX_TIM15_Init(void);
+
+// void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim);
+// void MX_TIM15_Init(void);
 
 void initSerial();
 
