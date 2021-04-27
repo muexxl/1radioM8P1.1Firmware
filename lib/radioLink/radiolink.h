@@ -5,6 +5,7 @@
 #include <configManager.h>
 #include <RF24.h>
 #include <clientmanager.h>
+#include <config.h>
 class Radiolink
 {
 private:
@@ -28,7 +29,7 @@ public:
     uint32_t address;
     unsigned long lastMessageReceived;
     bool health = true;
-    int maxTimeBetweenContactInMillis = 1000;
+    int maxTimeBetweenContactInMillis = config::CONNECTION_TIMEOUT;
     bool regularCheck();
 
     bool sendToMaster(void *message, int len);

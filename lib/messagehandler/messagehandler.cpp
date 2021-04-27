@@ -24,9 +24,9 @@ void MessageHandler::begin()
 }
 void MessageHandler::handle_RTCM_Message(uint8_t *msg, int len)
 {
-    ublox.send(++msg, --len);
+    ublox.add_to_RTCM_buffer((char *)msg,len);
     
-    flash_LED();
+    //flash_LED();
     //printObject(msg, len);
 }
 

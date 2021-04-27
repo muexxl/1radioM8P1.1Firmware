@@ -47,13 +47,7 @@ void setup () {
     MX_TIM15_Init(); //for flashing LED
     MX_I2C2_Init();
     initSerial();
-    messageHandler.begin();
-    //messageHandler.sendBuffer = &sendBuffer;
-    radiolink.maxTimeBetweenContactInMillis = config::CONNECTION_TIMEOUT;
-    //messageHandler.sendRegistrationRequest();    
-    data[0] = 0xf0; //register address ?!
-    data[0] = 0xf1; //register address ?!
-    data[0] = 0xf2; //register address ?!
+    messageHandler.begin();;    
     //
 }
 
@@ -62,7 +56,7 @@ void loop (){
     //ublox.send(&data[0], len);
     if (is_due_2000ms) {
         is_due_2000ms = false;
-        flash_LED(); // Heartbeat
+        //flash_LED(); // Heartbeat
         
         if (!radiolink.regularCheck())
         {
@@ -75,9 +69,7 @@ void loop (){
     }
     messageHandler.checkRadioAndHandleMessage();
     loadFromSerialToSendBuffer();
-    // Wire.beginTransmission(0x42);
-    // Wire.write(0xff);
-    // Wire.endTransmission();
+    ublox.check_rtcm_buffer_and_send_via_i2c();
     
 }
 

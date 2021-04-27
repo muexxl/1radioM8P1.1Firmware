@@ -8,12 +8,25 @@
 class UBlox
 {
 private:
-    const uint8_t i2c_address {0x42};
-    CircularBuffer rx_rtcm_buffer= CircularBuffer(config::RTCM_BUFFER_SIZE);
+    const uint8_t i2c_address{0x42};
 public:
-    uint8_t send(u_int8_t *data, u_int8_t len);
+    char rtcm_msg[config::MAX_RTCM_MSG_SIZE];
+    int rtcm_msg_len{0};
+    CircularBuffer rx_rtcm_buffer = CircularBuffer(config::RTCM_BUFFER_SIZE);
+    HAL_StatusTypeDef send(char *data, u_int8_t len);
     void add_to_RTCM_buffer(char data);
-    void add_to_RTCM_buffer(u_int8_t* data, u_int8_t len);
+    void add_to_RTCM_buffer(char *data, u_int8_t len);
+    bool RTCM_buffer_starts_with_rtcm_sync();
+    bool RTCM_buffer_greater_or_equal_buffer_size();
+    bool next_message_starts_with_synch_byte();
+    bool buffer_starts_with_message();
+    bool extract_message_from_RTCM_buffer();
+    bool send_message_if_available();
+    int get_length_of_RTCM_msg();
+    void clear_rtcm_buffer_until_next_sync_byte();
+    void check_rtcm_buffer_and_send_via_i2c();
+
+
     UBlox();
 };
 

@@ -116,6 +116,7 @@
                 "PLATFORMIO=50101",
                 "STM32G0xx",
                 "STM32G070xx",
+                "VERBOSE",
                 "STM32G0xx",
                 "ARDUINO=10808",
                 "ARDUINO_ARCH_STM32",

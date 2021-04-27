@@ -12,17 +12,7 @@
 // // clean stuff up here
 // }
 
-void test_true(void)
-{
-    TEST_ASSERT_TRUE(true);
-}
 
-void test_false(void)
-{
-    TEST_ASSERT_FALSE(false);
-    uint8_t data[] = {0xfd,0x10,0x43,0x01,0x01,0x10,0x43,0x01,0x01,0x6f,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x71,0x4a,0x35,0x75,0x6d,0x00,0x00,0x00,0x84,0xa4};
-
-}
 
 void test_circ_buff(void)
 {
@@ -72,7 +62,7 @@ void test_mav_drop(void)
     {
         cb.put(c);
     }
-    printObject(cb.buf, 0xff);
+    //printObject(cb.buf, 0xff);
     TEST_ASSERT_EQUAL(0xfe, cb.read(0));
     uint8_t len;
     uint8_t pos;
@@ -82,7 +72,7 @@ void test_mav_drop(void)
     TEST_ASSERT_EQUAL(0x10, cb.read(1));
     cb.dropFirstMAVMessage();
     TEST_ASSERT_EQUAL(0x19, cb.read(1));
-    printObject(cb.buf, 0xff);
+    //printObject(cb.buf, 0xff);
 
 }
 
@@ -114,7 +104,7 @@ void test_mav_drop2(void)
     {
         cb.put(c);
     }
-    cb.print();
+    //cb.print();
     TEST_ASSERT_EQUAL(0xfe, cb.read(0));
     uint8_t len;
     uint8_t pos;
@@ -123,12 +113,12 @@ void test_mav_drop2(void)
     TEST_ASSERT_EQUAL(0x09, cb.read(5));
     uint16_t old_size = cb.size();
     cb.dropFirstMAVMessage();
-    cb.print();
+    //cb.print();
     TEST_ASSERT_EQUAL(17, old_size- cb.size());
     TEST_ASSERT_EQUAL(0x10, cb.read(5));
     cb.dropFirstMAVMessage();
     TEST_ASSERT_EQUAL(0x19, cb.read(5));
-    cb.print();
+    //cb.print();
 
 }
 void test_cb_put_get_many(void) {
@@ -164,25 +154,4 @@ void test_cb_put_get_many(void) {
 
     TEST_ASSERT_EQUAL_CHAR(test_data[1],return_data[1]);
 
-
-
-}
-
-void setup()
-{
-    HAL_Delay(1000);
-    UNITY_BEGIN(); // IMPORTANT LINE!
-    RUN_TEST(test_false);
-    RUN_TEST(test_circ_buff);
-    RUN_TEST(test_true);
-    RUN_TEST(test_false);
-    RUN_TEST(test_mav_drop);
-    RUN_TEST(test_mav_drop2);
-    RUN_TEST(test_cb_put_get_many);
-    UNITY_END();
-}
-
-void loop()
-{
-    ;
 }
