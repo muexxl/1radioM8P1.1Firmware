@@ -33,9 +33,9 @@ public:
 	explicit CircularBuffer(int size);
     ~CircularBuffer();
 	void put(uint8_t item);
-	CIRCBUF_STATUS put(char * data, int len);
+	CIRCBUF_STATUS put(uint8_t * data, int len);
 	uint8_t get();
-	CIRCBUF_STATUS get(char * data, int len);
+	CIRCBUF_STATUS get(uint8_t * data, int len);
 	void reset();
 	bool isEmpty() const;
 	bool isFull() const;
@@ -43,9 +43,9 @@ public:
 	int capacity() const;
 	int size() const;
     int available() const;
-    uint8_t read(uint8_t relativePosition) const;
+    uint8_t read(int relativePosition);
     void dropMiddleData(uint8_t len, uint8_t offset);
-    int write(uint8_t relativePosition, uint8_t value);
+    int write(int relativePosition, uint8_t value);
     uint8_t findFirstMAVMessage(uint8_t * pos);
     uint8_t dropFirstMAVMessage();
     int isMAVMessage(int pos);

@@ -4,18 +4,20 @@
 #include <Arduino.h>
 #include <circularbuffer.h>
 #include <config.h>
+#include <crc.h>
 
 class UBlox
 {
 private:
     const uint8_t i2c_address{0x42};
+    uint32_t last_submission{0};
 public:
-    char rtcm_msg[config::MAX_RTCM_MSG_SIZE];
+    uint8_t rtcm_msg[config::MAX_RTCM_MSG_SIZE];
     int rtcm_msg_len{0};
     CircularBuffer rx_rtcm_buffer = CircularBuffer(config::RTCM_BUFFER_SIZE);
-    HAL_StatusTypeDef send(char *data, u_int8_t len);
-    void add_to_RTCM_buffer(char data);
-    void add_to_RTCM_buffer(char *data, u_int8_t len);
+    HAL_StatusTypeDef send(uint8_t *data, u_int8_t len);
+    void add_to_RTCM_buffer(uint8_t data);
+    void add_to_RTCM_buffer(uint8_t *data, u_int8_t len);
     bool RTCM_buffer_starts_with_rtcm_sync();
     bool RTCM_buffer_greater_or_equal_buffer_size();
     bool next_message_starts_with_synch_byte();

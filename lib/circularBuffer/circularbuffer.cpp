@@ -81,7 +81,7 @@ void CircularBuffer::put(uint8_t item)
 }
 
 
-CIRCBUF_STATUS CircularBuffer::put(char * data, int len){
+CIRCBUF_STATUS CircularBuffer::put(unsigned char * data, int len){
 	
 	CIRCBUF_STATUS result;
 	if (len <= available()){
@@ -98,7 +98,7 @@ CIRCBUF_STATUS CircularBuffer::put(char * data, int len){
 }
 
 
-CIRCBUF_STATUS CircularBuffer::get(char * data, int len){
+CIRCBUF_STATUS CircularBuffer::get(uint8_t * data, int len){
 	CIRCBUF_STATUS answer;
 
 	if (len <= size()){
@@ -131,25 +131,25 @@ uint8_t CircularBuffer::get()
 	return val;
 }
 
-uint8_t CircularBuffer::read(uint8_t relativePosition) const
+uint8_t CircularBuffer::read(int relativePosition)
 {
 	uint8_t val{0};
 	if (relativePosition > size())
 	{
 		return 0;
 	}
-	uint8_t realPosition = (tail + relativePosition) % maxSize;
+	int realPosition = (tail + relativePosition) % maxSize;
 	val = buf[realPosition];
 	return val;
 }
 
-int CircularBuffer::write(uint8_t relativePosition, uint8_t value)
+int CircularBuffer::write(int relativePosition, uint8_t value)
 {
 	if (relativePosition > size())
 	{
 		return 0;
 	}
-	uint8_t realPosition = (tail + relativePosition) % maxSize;
+	int realPosition = (tail + relativePosition) % maxSize;
 	buf[realPosition] = value;
 
 	return 1;

@@ -5,8 +5,10 @@ uint32_t hal_tick_counter_value{0};
 uint32_t ms_passed{0};
 TIM_HandleTypeDef htim15;
 
-
-bool is_due_2000ms {false};
+bool is_due_2000ms{false};
+bool is_due_1000ms{false};
+bool is_due_500ms{false};
+bool is_due_200ms{false};
 
 void update_timers()
 {
@@ -16,13 +18,26 @@ void update_timers()
     {
         ms_passed++;
 
+        if (ms_passed % 200 == 0)
+        {
+            is_due_200ms = true;
+        }
+
+        if (ms_passed % 500 == 0)
+        {
+            is_due_500ms = true;
+        }
+
         if (ms_passed % 1000 == 0)
         {
-            ;
-        }if (ms_passed % 2000 == 0)
+            is_due_1000ms = true;
+        }
+
+        if (ms_passed % 2000 == 0)
         {
             is_due_2000ms = true;
         }
+
         if (ms_passed == 12000)
         {
             ms_passed = 0; // reset every 12 seconds
@@ -39,12 +54,14 @@ void flash_LED(int repetition)
     {
         HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);
     }
-    htim15.Init.RepetitionCounter = repetition-1;
-    
-    if (repetition == 1){
+    htim15.Init.RepetitionCounter = repetition - 1;
+
+    if (repetition == 1)
+    {
         htim15.Init.Period = 10;
     }
-    else {
+    else
+    {
         htim15.Init.Period = 120;
     }
     if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
@@ -61,10 +78,12 @@ void flash_LED(int repetition)
     }
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = 100;
-    if (repetition == 1){
+    if (repetition == 1)
+    {
         sConfigOC.Pulse = 1;
     }
-    else {
+    else
+    {
         sConfigOC.Pulse = 100;
     }
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;

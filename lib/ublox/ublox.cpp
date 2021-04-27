@@ -1,48 +1,60 @@
 
 #include <ublox.h>
 #include <mxtiming.h>
+#include <mxsupport.h>
+// #pragma GCC push_options
+// #pragma GCC optimize ("O0")
 
 extern I2C_HandleTypeDef hi2c2;
+extern int I2C_TX_COMPLETE;
 
 const u_int8_t RTCM_SYNC{0xd3};
 const u_int8_t UBLOX_REG_ADDR{0xff};
 
 UBlox::UBlox()
 {
-    //Wire.begin();
+    
 }
 
-HAL_StatusTypeDef UBlox::send(char *data, u_int8_t len)
+HAL_StatusTypeDef UBlox::send(uint8_t *data, u_int8_t len)
 {
-    HAL_StatusTypeDef answer{HAL_ERROR};
-    if (hi2c2.State == HAL_I2C_STATE_READY)
-    {
-        answer = HAL_I2C_Master_Transmit(&hi2c2, 0x42 << 1, (uint8_t *)&UBLOX_REG_ADDR,1, 100);
-        answer = HAL_I2C_Master_Transmit_IT(&hi2c2, 0x42 << 1, (uint8_t *)&data[0], len);
-        flash_LED();
-    }
 
+    HAL_StatusTypeDef answer{HAL_ERROR};
+
+    uint32_t now = HAL_GetTick();
+    bool tx_ready = (now - last_submission) > config::UBLOX_MIN_TIME_BETWEEN_SUBMISSION_IN_MS;
+    if (tx_ready)
+    {
+
+        answer = HAL_I2C_Master_Transmit_IT(&hi2c2, 0x84, &rtcm_msg[0], rtcm_msg_len);
+        //answer = HAL_I2C_Master_Transmit(&hi2c2, 0x42 << 1, (uint8_t *)&data[0], len,1000);
+        last_submission = now;
+        flash_LED();
+        //printObject(&data,len);
+        //HAL_Delay(1);
+        //Serial.println(len);
+    }
     return answer;
 }
 
-void UBlox::add_to_RTCM_buffer(char data)
+void UBlox::add_to_RTCM_buffer(uint8_t data)
 {
     rx_rtcm_buffer.put(data);
 }
-void UBlox::add_to_RTCM_buffer(char *data, u_int8_t len)
+void UBlox::add_to_RTCM_buffer(uint8_t *data, u_int8_t len)
 {
-    rx_rtcm_buffer.put((char *)data, len);
+    rx_rtcm_buffer.put((uint8_t *)data, len);
 }
 
 bool UBlox::RTCM_buffer_starts_with_rtcm_sync()
 {
-    bool result = rx_rtcm_buffer.read(0) == RTCM_SYNC;
+    bool result = (0xd3u == rx_rtcm_buffer.read(0));
     return result;
 }
 
 void UBlox::clear_rtcm_buffer_until_next_sync_byte()
 {
-
+    int bytes_dropped{0};
     while (!rx_rtcm_buffer.isEmpty())
     {
         if (RTCM_buffer_starts_with_rtcm_sync())
@@ -51,8 +63,18 @@ void UBlox::clear_rtcm_buffer_until_next_sync_byte()
         }
         else
         {
-            rx_rtcm_buffer.get();
+            char dropbyte = (char)rx_rtcm_buffer.get();
+            // //Serial.print("dropping byte from buffer: ");
+            Serial.print(dropbyte, HEX);
+            Serial.print(" ");
+            bytes_dropped++;
         }
+    }
+    if (bytes_dropped)
+    {
+        Serial.print('\n');
+
+        rx_rtcm_buffer.print();
     }
 }
 
@@ -67,6 +89,16 @@ int UBlox::get_length_of_RTCM_msg()
     length += rx_rtcm_buffer.read(2);         //plus second byte
     length &= 0x3ff;
     length += 6;
+    // if (length < 12)
+    // {
+    //     rx_rtcm_buffer.print();
+    // }
+    // else if (length > 101)
+    // {
+    //     /* code */
+    //     rx_rtcm_buffer.print();
+    // }
+
     return length;
 }
 
@@ -91,8 +123,9 @@ bool UBlox::extract_message_from_RTCM_buffer()
     }
     else if (length > config::MAX_RTCM_MSG_SIZE)
     {
-        rx_rtcm_buffer.get();
-        result = extract_message_from_RTCM_buffer();
+        rx_rtcm_buffer.get();                        //remove first byte
+        clear_rtcm_buffer_until_next_sync_byte();    //clear buffer
+        result = extract_message_from_RTCM_buffer(); //enter recursive loop
     }
     else if (length > rx_rtcm_buffer.size())
     {
@@ -102,13 +135,27 @@ bool UBlox::extract_message_from_RTCM_buffer()
     {
         rtcm_msg_len = length;
         rx_rtcm_buffer.get(&rtcm_msg[0], rtcm_msg_len);
-        result = true;
+        bool crc_check_result = crc24q_check((unsigned char *)&rtcm_msg, rtcm_msg_len);
+
+        if (crc_check_result)
+        {
+            result = true;
+        }
+        else
+        {
+            rtcm_msg_len = 0;
+            result = extract_message_from_RTCM_buffer();
+        }
     }
     return result;
 }
 
 void UBlox::check_rtcm_buffer_and_send_via_i2c()
 {
+    if (hi2c2.State != HAL_I2C_STATE_READY)
+    {
+        return;
+    }
     HAL_StatusTypeDef send_result;
 
     if (rtcm_msg_len == 0)
@@ -123,8 +170,9 @@ void UBlox::check_rtcm_buffer_and_send_via_i2c()
 
         if (send_result == HAL_OK)
         {
-            //set length to zero to avoid double sending
             rtcm_msg_len = 0;
         }
     }
 }
+
+// #pragma GCC pop_options
