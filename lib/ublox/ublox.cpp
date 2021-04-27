@@ -54,7 +54,7 @@ bool UBlox::RTCM_buffer_starts_with_rtcm_sync()
 
 void UBlox::clear_rtcm_buffer_until_next_sync_byte()
 {
-    int bytes_dropped{0};
+    // int bytes_dropped{0};
     while (!rx_rtcm_buffer.isEmpty())
     {
         if (RTCM_buffer_starts_with_rtcm_sync())
@@ -63,19 +63,16 @@ void UBlox::clear_rtcm_buffer_until_next_sync_byte()
         }
         else
         {
-            char dropbyte = (char)rx_rtcm_buffer.get();
-            // //Serial.print("dropping byte from buffer: ");
-            Serial.print(dropbyte, HEX);
-            Serial.print(" ");
-            bytes_dropped++;
+        rx_rtcm_buffer.get();
+
         }
     }
-    if (bytes_dropped)
-    {
-        Serial.print('\n');
+    // if (bytes_dropped)
+    // {
+    //     Serial.print('\n');
 
-        rx_rtcm_buffer.print();
-    }
+    //     rx_rtcm_buffer.print();
+    // }
 }
 
 int UBlox::get_length_of_RTCM_msg()
@@ -89,15 +86,7 @@ int UBlox::get_length_of_RTCM_msg()
     length += rx_rtcm_buffer.read(2);         //plus second byte
     length &= 0x3ff;
     length += 6;
-    // if (length < 12)
-    // {
-    //     rx_rtcm_buffer.print();
-    // }
-    // else if (length > 101)
-    // {
-    //     /* code */
-    //     rx_rtcm_buffer.print();
-    // }
+
 
     return length;
 }
