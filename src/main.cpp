@@ -54,22 +54,24 @@ void setup()
     MX_I2C2_Init();
     initSerial();
     messageHandler.begin();
-
-    ;
-    //
+    flash_LED();
 }
 
 void loop()
 {
     update_timers();
-    if (is_due_2000ms)
+    if (is_due_1000ms)
     {
-        is_due_2000ms = false;
+        is_due_1000ms = false;
         //flash_LED(); // Heartbeat
 
+        //ublox.rx_rtcm_buffer.print();
+        //ublox.rx_rtcm_buffer.print_sorted();
+        //ublox.rx_rtcm_buffer.reset();
+        Serial.printf("Lost Packets %d \n",messageHandler.lost_rtcm_packets);
         if (!radiolink.regularCheck())
         {
-            messageHandler.sendRegistrationRequest();
+            //messageHandler.sendRegistrationRequest();
 #ifdef VERBOSE
 
             Serial.print(("Sending Registration request\n"));

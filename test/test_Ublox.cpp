@@ -2,9 +2,8 @@
 
 #include <unity.h>
 #include <Arduino.h>
-#include <circularbuffer.h>
+#include <sequence.h>
 #include <mxsupport.h>
-#include <ublox.h>
 
 
 void test_ublox(void)

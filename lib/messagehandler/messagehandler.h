@@ -25,7 +25,8 @@ namespace CommCodes
 
     const uint8_t MAX_MSG_ID = 0x40;
     const uint8_t GPS_MSG = 0x41;
-    const uint8_t GPS_RTCM_MSG = 0xd3;
+    const uint8_t GPS_RTCM_MSG_MIN = 0xd0;
+    const uint8_t GPS_RTCM_MSG_MAX = 0xdf;
     const uint8_t HEARTBEAT = 0x48;
 }; // namespace CommCodes
 
@@ -36,8 +37,10 @@ private:
     bool master = false;
     uint8_t lastMessageID{0};
     uint8_t messageID{0};
+    uint8_t last_rtcm_msg_id{0};
 public:
 
+    int lost_rtcm_packets{0};
     ClientManager clientManager;
     Radiolink radiolink;
     RadioConfig & config {radiolink.config};

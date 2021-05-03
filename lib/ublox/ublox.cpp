@@ -78,7 +78,7 @@ void UBlox::clear_rtcm_buffer_until_next_sync_byte()
 int UBlox::get_length_of_RTCM_msg()
 {
     int length{0};
-    if (rx_rtcm_buffer.size() < 7)
+    if (rx_rtcm_buffer.get_size() < 7)
     {
         return 0;
     }
@@ -86,7 +86,6 @@ int UBlox::get_length_of_RTCM_msg()
     length += rx_rtcm_buffer.read(2);         //plus second byte
     length &= 0x3ff;
     length += 6;
-
 
     return length;
 }
@@ -116,7 +115,7 @@ bool UBlox::extract_message_from_RTCM_buffer()
         clear_rtcm_buffer_until_next_sync_byte();    //clear buffer
         result = extract_message_from_RTCM_buffer(); //enter recursive loop
     }
-    else if (length > rx_rtcm_buffer.size())
+    else if (length > rx_rtcm_buffer.get_size())
     {
         result = false;
     }
@@ -124,6 +123,7 @@ bool UBlox::extract_message_from_RTCM_buffer()
     {
         rtcm_msg_len = length;
         rx_rtcm_buffer.get(&rtcm_msg[0], rtcm_msg_len);
+        printObject(&rtcm_msg,rtcm_msg_len);
         bool crc_check_result = crc24q_check((unsigned char *)&rtcm_msg, rtcm_msg_len);
 
         if (crc_check_result)
@@ -156,9 +156,10 @@ void UBlox::check_rtcm_buffer_and_send_via_i2c()
     {
         //try to send message
         send_result = send(&rtcm_msg[0], rtcm_msg_len);
-
+        
         if (send_result == HAL_OK)
         {
+            Serial.printf("Sent message: %d \n", rtcm_msg_len);
             rtcm_msg_len = 0;
         }
     }

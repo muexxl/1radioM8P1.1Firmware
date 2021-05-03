@@ -24,7 +24,28 @@ void MessageHandler::begin()
 }
 void MessageHandler::handle_RTCM_Message(uint8_t *msg, int len)
 {
-    ublox.add_to_RTCM_buffer(msg,len);
+    uint8_t current_msg_id = msg[0] &0x0f;
+    if( current_msg_id == 0x0) {
+        ; //start of new message
+    } else if (current_msg_id ==0xf)
+    {
+        ;//last message //checksum
+    }
+    else if (current_msg_id == ++last_rtcm_msg_id)
+    {
+        ; //next paket
+    } else if (last_rtcm_msg_id >=current_msg_id)
+    {
+        lost_rtcm_packets += current_msg_id;
+    } else {
+        lost_rtcm_packets += current_msg_id - last_rtcm_msg_id;
+    }
+
+    
+    last_rtcm_msg_id = current_msg_id;
+    if (current_msg_id != 0x0f){
+        ublox.add_to_RTCM_buffer(&msg[1],len--);
+    }
     
     //flash_LED();
     //printObject(msg, len);
@@ -34,7 +55,7 @@ void MessageHandler::handleBroadcast(uint8_t *msg, int len)
 {
     //radiolink.restore_ack_payload_buffer();
     uint8_t msgID = msg[0];
-    if (msgID == CommCodes::GPS_RTCM_MSG)
+    if (msgID >>4 == CommCodes::GPS_RTCM_MSG_MIN >>4)//only check first octet
     {
         handle_RTCM_Message(msg,len);
     }

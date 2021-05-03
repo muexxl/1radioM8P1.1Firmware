@@ -41,15 +41,17 @@ public:
 	bool isFull() const;
 	bool isNotFull() const;
 	int capacity() const;
-	int size() const;
+	int get_size() const;
+    int size;
     int available() const;
     uint8_t read(int relativePosition);
-    void dropMiddleData(uint8_t len, uint8_t offset);
+    void dropMiddleData(int len, int offset);
     int write(int relativePosition, uint8_t value);
-    uint8_t findFirstMAVMessage(uint8_t * pos);
-    uint8_t dropFirstMAVMessage();
+    int findFirstMAVMessage(int * pos);
+    int dropFirstMAVMessage();
     int isMAVMessage(int pos);
     void print();
+    void print_sorted();
 	uint8_t * buf;
     
 private:

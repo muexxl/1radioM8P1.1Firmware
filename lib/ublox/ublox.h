@@ -28,7 +28,6 @@ public:
     void clear_rtcm_buffer_until_next_sync_byte();
     void check_rtcm_buffer_and_send_via_i2c();
 
-
     UBlox();
 };
 

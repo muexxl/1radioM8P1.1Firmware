@@ -20,6 +20,9 @@ extern void test_ublox_rtcm_extract_msg(void);
 
 extern void test_crc(void);
 
+extern void test_sequence(void);
+extern void test_packet(void);
+
 void setup()
 {
     HAL_Delay(1000);
@@ -38,6 +41,9 @@ void setup()
     RUN_TEST(test_ublox_rtcm_extract_msg);
 
     RUN_TEST(test_crc);
+
+    RUN_TEST(test_sequence);
+    RUN_TEST(test_packet);
 
     UNITY_END();
 }

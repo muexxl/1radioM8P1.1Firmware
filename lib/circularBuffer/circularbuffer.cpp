@@ -43,7 +43,7 @@ int CircularBuffer::capacity() const
 	return maxSize;
 }
 
-int CircularBuffer::size() const
+int CircularBuffer::get_size() const
 {
 	// returns current size
 	int size = maxSize;
@@ -63,13 +63,13 @@ int CircularBuffer::size() const
 }
 int CircularBuffer::available() const
 {
-	return maxSize - size();
+	return maxSize - get_size();
 }
 
 void CircularBuffer::put(uint8_t item)
 {
 	buf[head] = item;
-	
+
 	if (full)
 	{
 		tail = (++tail) % maxSize;
@@ -78,42 +78,50 @@ void CircularBuffer::put(uint8_t item)
 	head = (++head) % maxSize;
 
 	full = tail == head;
+	size = get_size();
 }
 
+CIRCBUF_STATUS CircularBuffer::put(unsigned char *data, int len)
+{
 
-CIRCBUF_STATUS CircularBuffer::put(unsigned char * data, int len){
-	
 	CIRCBUF_STATUS result;
-	if (len <= available()){
+	if (len <= available())
+	{
 		result = CIRCBUF_OK;
-	} else {
+	}
+	else
+	{
 		result = CIRCBUF_OVERFLOW;
 	}
 
-	while (len--){
-		put(*data++);	
-		}
-	
+	while (len--)
+	{
+		put(*data++);
+	}
+
 	return result;
 }
 
-
-CIRCBUF_STATUS CircularBuffer::get(uint8_t * data, int len){
+CIRCBUF_STATUS CircularBuffer::get(uint8_t *data, int len)
+{
 	CIRCBUF_STATUS answer;
 
-	if (len <= size()){
-		answer=CIRCBUF_OK;
-	} else {
+	if (len <= get_size())
+	{
+		answer = CIRCBUF_OK;
+	}
+	else
+	{
 
-		answer=CIRCBUF_NOT_ENOUGH_DATA;
+		answer = CIRCBUF_NOT_ENOUGH_DATA;
 	}
 
-	while(len--){
-		*data++=get();
-}
+	while (len--)
+	{
+		*data++ = get();
+	}
 	return answer;
 }
-
 
 uint8_t CircularBuffer::get()
 {
@@ -134,7 +142,7 @@ uint8_t CircularBuffer::get()
 uint8_t CircularBuffer::read(int relativePosition)
 {
 	uint8_t val{0};
-	if (relativePosition > size())
+	if (relativePosition > get_size())
 	{
 		return 0;
 	}
@@ -145,7 +153,7 @@ uint8_t CircularBuffer::read(int relativePosition)
 
 int CircularBuffer::write(int relativePosition, uint8_t value)
 {
-	if (relativePosition > size())
+	if (relativePosition > get_size())
 	{
 		return 0;
 	}
@@ -155,7 +163,7 @@ int CircularBuffer::write(int relativePosition, uint8_t value)
 	return 1;
 }
 
-void CircularBuffer::dropMiddleData(uint8_t len_to_preserve, uint8_t len_middle_data)
+void CircularBuffer::dropMiddleData(int len_to_preserve, int len_middle_data)
 {
 	while (len_to_preserve--)
 	{
@@ -165,10 +173,10 @@ void CircularBuffer::dropMiddleData(uint8_t len_to_preserve, uint8_t len_middle_
 	tail = (tail + len_middle_data) % maxSize;
 }
 
-uint8_t CircularBuffer::dropFirstMAVMessage() // TODO HIER MUSSS EIN FEHLER SEIN// NOCHMAL TESTEN !!
+int CircularBuffer::dropFirstMAVMessage() // TODO HIER MUSSS EIN FEHLER SEIN// NOCHMAL TESTEN !!
 {
-	uint8_t pos;
-	uint8_t len = findFirstMAVMessage(&pos);
+	int pos;
+	int len = findFirstMAVMessage(&pos);
 
 	if (len)
 	{
@@ -177,16 +185,16 @@ uint8_t CircularBuffer::dropFirstMAVMessage() // TODO HIER MUSSS EIN FEHLER SEIN
 	return len;
 }
 
-uint8_t CircularBuffer::findFirstMAVMessage(uint8_t *pos)
+int CircularBuffer::findFirstMAVMessage(int *pos)
 {
-	uint8_t len{0};
-	for (int i = 0; i < size(); i++)
+	int len{0};
+	for (int i = 0; i < get_size(); i++)
 	{
 		len = isMAVMessage(i);
 		if (len)
 		{
 			*pos = i;
-			 break;
+			break;
 		}
 	}
 	return len;
@@ -215,9 +223,9 @@ int CircularBuffer::isMAVMessage(int pos)
 		return 0;
 	}
 
-	if (pos + message_length >= size())
+	if (pos + message_length >= get_size())
 	{
-		int max_length{size() - pos};
+		int max_length{get_size() - pos};
 		return max_length;
 	}
 	else
@@ -226,7 +234,7 @@ int CircularBuffer::isMAVMessage(int pos)
 
 		if (value == magic_v1 || value == magic_v2)
 		{
-			
+
 			return message_length;
 		}
 		else
@@ -235,15 +243,48 @@ int CircularBuffer::isMAVMessage(int pos)
 		}
 	}
 	return 0;
-
-
 }
 
-void CircularBuffer::print(){
-	char tmp[size()];
-	for (size_t i = 0; i < size(); i++)
+void CircularBuffer::print()
+{
+	char tmp[get_size()];
+	for (size_t i = 0; i < get_size(); i++)
 	{
 		tmp[i] = read(i);
 	}
-	printObject(&tmp, size());
+	printObject(&tmp, get_size());
+}
+
+void CircularBuffer::print_sorted()
+{
+
+	for (size_t i = 0; i < get_size(); i++)
+	{
+		/* code */
+
+		//cout << std::dec << counter++ << ":";
+
+		if (i % 0x10 == 0)
+		{
+			if (i)
+			{
+				Serial.print(F("\n"));
+			}
+
+			if (i < 0x10)
+			{
+				Serial.print(0);
+			}
+			Serial.print(i, HEX);
+			Serial.print(F("  |  "));
+		}
+
+		if (int(read(i)) < 0x10)
+		{
+			Serial.print(0);
+		}
+		Serial.print(int(read(i)), HEX);
+		Serial.print(" ");
+	}
+	Serial.print("\n");
 }
